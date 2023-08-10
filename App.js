@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { StyleSheet, View, Image, Dimensions, TouchableOpacity, FlatList, ScrollView, Text } from "react-native";
 import GaleriaNormal from "./GaleriaNormal";
 import GaleriaCorregida from "./GaleriaCorregida";
+import GaleriaDetalle from "./GaleriaDetalle";
 
 const images = [
   { uri: "https://i.imgur.com/52DBcCg.jpg" },
@@ -16,7 +17,8 @@ export default function App() {
 
   return (
     <>
-      <GaleriaCorregida />
+      <Text>as</Text>
+      <GaleriaDetalle />
     </>
   );
 }

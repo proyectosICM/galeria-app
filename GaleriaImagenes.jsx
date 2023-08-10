@@ -1,17 +1,51 @@
 import React, { useEffect, useRef, useState } from "react";
-import { StyleSheet, View, Image, Dimensions, TouchableOpacity, FlatList, ScrollView, Text } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Image,
+  Dimensions,
+  TouchableOpacity,
+  FlatList,
+  ScrollView,
+  Text,
+} from "react-native";
 
 const images = [
-  { uri: "https://i.imgur.com/52DBcCg.jpg" },
-  { uri: "https://i.imgur.com/7QZMRcV.jpg" },
-  { uri: "https://i.imgur.com/8nBNvc1.jpg" },
-  { uri: "https://i.imgur.com/7QZMRcV.jpg" },
-  { uri: "https://i.imgur.com/sXFSen7.jpg" },
+  {
+    uri: "https://i.imgur.com/52DBcCg.jpg",
+    description: "Imagen 1",
+    usuario: "Juan Paerse",
+    rol: "Conductor",
+  },
+  {
+    uri: "https://i.imgur.com/7QZMRcV.jpg",
+    description: "Imagen 2",
+    usuario: "Marco Siantes",
+    rol: "Mecanico",
+  },
+  {
+    uri: "https://i.imgur.com/8nBNvc1.jpg",
+    description: "Imagen 3",
+    usuario: "Juan Frunte",
+    rol: "Conductor",
+  },
+  {
+    uri: "https://i.imgur.com/7QZMRcV.jpg",
+    description: "Imagen 4",
+    usuario: "Jaime Suares",
+    rol: "Conductor",
+  },
+  {
+    uri: "https://i.imgur.com/sXFSen7.jpg",
+    description: "Imagen 5",
+    usuario: "Alex Opa",
+    rol: "Mecanico",
+  },
 ];
 
 const numColumns = 3; // Number of columns in the gallery grid
 
-export default function GaleriaCorregida() {
+export default function GaleriaImagenes() {
   const [showThumbnails, setShowThumbnails] = useState(false);
   const [galleryActiveIndex, setGalleryActiveIndex] = useState(0);
   const [thumbnailsActiveIndex, setThumbnailsActiveIndex] = useState(0);
@@ -20,37 +54,55 @@ export default function GaleriaCorregida() {
 
   useEffect(() => {
     // Asigna el ref después de que el componente ha sido montado
-    scrollViewRef.current.scrollTo({
-      x: activeIndex * Dimensions.get("window").width,
-      animated: true,
-    });
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollTo({
+        x: activeIndex * Dimensions.get("window").width,
+        animated: true,
+      });
+    }
   }, [activeIndex]);
-
-  const renderItem = ({item, index }) => (
-    <TouchableOpacity style={styles.gridItem} onPress={() => handleThumbnailPress(index)}>
-      <Image source={{ uri: item.uri }} style={styles.thumbnail} resizeMode="cover" />
+  const renderItem = ({ item, index }) => (
+    <TouchableOpacity
+      style={styles.gridItem}
+      onPress={() => handleThumbnailPress(index)}
+    >
+      <Image
+        source={{ uri: item.uri }}
+        style={styles.thumbnail}
+        resizeMode="cover"
+      />
     </TouchableOpacity>
   );
 
- 
   const renderImageItem = (image, index) => {
     return (
       <View key={index} style={styles.slide}>
-        <Image source={{ uri: image.uri }} style={styles.image} resizeMode="contain" />
+        <Image
+          source={{ uri: image.uri }}
+          style={styles.image}
+          resizeMode="contain"
+        />
+        <Text style={styles.imageDescription}>{image.description}</Text>
+        <Text style={styles.imageDescription}>{image.usuario}</Text>
+        <Text style={styles.imageDescription}>{image.rol}</Text>
       </View>
     );
   };
-  
+
   const handleThumbnailPress = (index) => {
     setActiveIndex(index);
-    setShowThumbnails(false);
+    setShowThumbnails(true);
     ///scrollViewRef.current({ x: index * Dimensions.get("window").width });
   };
 
   const renderThumbnailItem = ({ item, index }) => {
     return (
       <TouchableOpacity onPress={() => handleThumbnailPress(index)}>
-        <Image source={{ uri: item.uri }} style={styles.thumbnail} resizeMode="cover" />
+        <Image
+          source={{ uri: item.uri }}
+          style={styles.thumbnail}
+          resizeMode="cover"
+        />
       </TouchableOpacity>
     );
   };
@@ -68,13 +120,6 @@ export default function GaleriaCorregida() {
   return (
     <View style={styles.container}>
       {showThumbnails ? (
-        <FlatList
-        data={images}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()}
-        numColumns={numColumns}
-      />
-      ) : (
         <ScrollView
           ref={scrollViewRef}
           style={styles.wrapper}
@@ -86,15 +131,26 @@ export default function GaleriaCorregida() {
         >
           {images.map((image, index) => renderImageItem(image, index))}
         </ScrollView>
+      ) : (
+        <>
+          <Text>sad</Text>
+          <FlatList
+            data={images}
+            renderItem={renderItem}
+            keyExtractor={(item, index) => index.toString()}
+            numColumns={numColumns}
+          />
+        </>
       )}
 
       <TouchableOpacity style={styles.button} onPress={toggleThumbnails}>
-        <Text style={styles.buttonText}>{showThumbnails ? "Ver galería" : "Ver miniaturas"}</Text>
+        <Text style={styles.buttonText}>
+          {showThumbnails ? "Ver miniaturas" : "Ver galería"  }
+        </Text>
       </TouchableOpacity>
     </View>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -102,8 +158,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#f0f0f0",
     marginTop: 60,
-    alignItems: 'center',
-    
+    alignItems: "center",
   },
   wrapper: {
     flex: 1,
@@ -115,7 +170,13 @@ const styles = StyleSheet.create({
   },
   image: {
     width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
+    height: Dimensions.get("window").height - 200,
+  },
+  imageDescription: {
+    marginTop: 10,
+    textAlign: "center",
+    fontSize: 16,
+    fontWeight: "bold",
   },
   thumbnail: {
     width: 80,
